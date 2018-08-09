@@ -13,7 +13,7 @@ $dest = YOUR_URL_HERE
 $defaultIterations = 5
 $currentTime = Get-Date -Format -yyyy-MM-dd-HH-mm-ss
 $stopwatch = [System.Diagnostics.Stopwatch]::new()
-$origProgressPref = $progressPref
+$tempProg = $progressPreference
 $times = [System.Collections.ArrayList]::new()
 
 <#
@@ -50,7 +50,7 @@ $result = @{
 
 # Run the requests
 Write-Host "Running $iterations tests..."
-$progressPref = 'SilentlyContinue'
+$progressPreference = 'SilentlyContinue' # no progress bar
 for ($i = 0; $i -lt $iterations; $i++) {
 	$stopwatch.Start()
 	Invoke-WebRequest -Uri $dest -UseBasicParsing > null
@@ -60,7 +60,7 @@ for ($i = 0; $i -lt $iterations; $i++) {
 	
 	$stopwatch.Reset()
 }
-$progressPref = $origProgressPref
+$progressPreference = $tempProg
 
 foreach($time in $times) {
 	$time, " at " | Add-Content -Path "result$currentTime.csv" -NoNewLine
